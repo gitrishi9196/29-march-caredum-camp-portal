@@ -12,6 +12,15 @@ const submitBtn = document.getElementById('submitBtn');
 const btnText = document.querySelector('.btn-text');
 const submitLoader = document.getElementById('submitLoader');
 const formMessage = document.getElementById('formMessage');
+const successModal = document.getElementById('successModal');
+const closeModalBtn = document.getElementById('closeModalBtn');
+
+// Close Modal Event
+if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', () => {
+        successModal.style.display = 'none';
+    });
+}
 
 // File Upload UI Interaction
 fileInput.addEventListener('change', function (e) {
@@ -38,6 +47,49 @@ function showMessage(msg, type) {
     setTimeout(() => {
         formMessage.style.display = 'none';
     }, 5000);
+}
+
+// Helper Function: Compress Image to make uploads instant
+function compressImage(file, maxWidth, maxHeight) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = event => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob(blob => {
+                    resolve(new File([blob], file.name, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    }));
+                }, 'image/jpeg', 0.8); // 80% quality JPEG
+            };
+            img.onerror = error => reject(error);
+        };
+        reader.onerror = error => reject(error);
+    });
 }
 
 // Helper Function: Upload Image to ImgBB
@@ -95,7 +147,9 @@ form.addEventListener('submit', async function (e) {
             if (IMGBB_API_KEY === 'YOUR_IMGBB_API_KEY') {
                 throw new Error("Please add your ImgBB API Key in script.js to upload photos.");
             }
-            photoUrl = await uploadImageToImgBB(photoFile);
+            // Compress Image to max 800x800 before upload to save time
+            const compressedFile = await compressImage(photoFile, 800, 800);
+            photoUrl = await uploadImageToImgBB(compressedFile);
         }
 
         // 3. Prepare payload for SheetDB
@@ -131,7 +185,7 @@ form.addEventListener('submit', async function (e) {
 
         if (response.ok) {
             // Success
-            showMessage('Patient details successfully submitted!', 'success');
+            if (successModal) successModal.style.display = 'flex';
             form.reset();
             fileNameDisplay.textContent = '';
         } else {
