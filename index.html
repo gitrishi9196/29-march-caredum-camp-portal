@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caredum - Free Medical Camp Data Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="portal-container">
+        <header class="portal-header">
+            <div class="logo-container">
+                <!-- Using Caredum colors in a stylized text logo or an image placeholder -->
+                <h1 class="logo-text"><span class="blue">care</span><span class="green">dum</span></h1>
+            </div>
+            <h2>Free Medical Camp - March 29th</h2>
+            <p>Patient Details Collection Portal</p>
+        </header>
+
+        <form id="campForm" class="camp-form">
+            
+            <div class="form-section">
+                <h3>Personal Information</h3>
+                
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter full name">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-half">
+                        <label for="age">Age *</label>
+                        <input type="number" id="age" name="age" required placeholder="Years" min="1" max="120">
+                    </div>
+                    <div class="col-half">
+                        <label for="gender">Gender *</label>
+                        <select id="gender" name="gender" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-half">
+                        <label for="contact">Contact No. *</label>
+                        <input type="tel" id="contact" name="contact" required placeholder="10-digit number" pattern="[0-9]{10}">
+                    </div>
+                    <div class="col-half">
+                        <label for="weight">Weight (kg) *</label>
+                        <input type="number" id="weight" name="weight" step="0.1" required placeholder="e.g. 65.5">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="address">Address *</label>
+                        <textarea id="address" name="address" required placeholder="Full residential address" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Medical details</h3>
+                
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="bp">Blood Pressure (BP) *</label>
+                        <input type="text" id="bp" name="bp" required placeholder="e.g. 120/80 mmHg">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="section-label">Tests Done *</label>
+                    <div class="checkbox-group">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="testType" value="Blood Group">
+                            <span class="checkmark"></span>
+                            Blood Group
+                        </label>
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="testType" value="Sugar Test">
+                            <span class="checkmark"></span>
+                            Sugar Test
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Sample details</h3>
+                
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="serial">Sample Serial No. *</label>
+                        <input type="text" id="serial" name="serial" required placeholder="Enter batch or serial number">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="photo">Upload Sample Photo *</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="photo" name="photo" accept="image/*" required class="file-input">
+                            <div class="file-upload-design" id="fileDesign">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                <span>Click to browse or drag image here</span>
+                            </div>
+                        </div>
+                        <p class="file-name" id="fileNameDisplay"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" id="submitBtn" class="btn-primary">
+                    <span class="btn-text">Submit Details</span>
+                    <div class="loader" id="submitLoader" style="display: none;"></div>
+                </button>
+            </div>
+            
+            <div id="formMessage" class="form-message" style="display: none;"></div>
+        </form>
+    </div>
+
+    <!-- Script references -->
+    <script src="script.js"></script>
+</body>
+</html>
